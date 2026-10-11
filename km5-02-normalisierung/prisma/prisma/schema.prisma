@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Plz {
+  plz        String       @id
+  ort        String
+  bestellung Bestellung[]
+}
+
+model Bestellung {
+  bestell_nr Int             @id
+  kunde      String
+  plz        String
+  plzRel     Plz             @relation(fields: [plz], references: [plz])
+  positionen Bestellposition[]
+}
+
+model Bestellposition {
+  bestell_nr Int
+  position   Int
+  track_id   Int
+  bestellung Bestellung @relation(fields: [bestell_nr], references: [bestell_nr])
+
+  @@id([bestell_nr, position])
+}
+
+model Song {
+  song_id   Int            @id
+  titel     String
+  dauerSek  Int
+  playlists SongPlaylist[]
+}
+
+model Playlist {
+  playlist_id Int            @id
+  name        String
+  songs       SongPlaylist[]
+}
+
+model SongPlaylist {
+  song_id     Int
+  playlist_id Int
+  song        Song     @relation(fields: [song_id], references: [song_id])
+  playlist    Playlist @relation(fields: [playlist_id], references: [playlist_id])
+
+  @@id([song_id, playlist_id])
+}
