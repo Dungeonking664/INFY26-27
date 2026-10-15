@@ -40,13 +40,16 @@ console.log("Neuestes Album:", neueste[0].titel, "(", neueste[0].jahr, ")");
 
 // --- Aufgabe KM5-05: drei Queries -------------------------------------
 // a) ältestes Album (orderBy + limit) — das Gegenstück zum neuesten oben:
-const aeltestes = await db.select().from(album)
+const aeltestes = db.select().from(album)
   .orderBy(asc(album.jahr)).limit(1);
+console.log("Ältestes Album, erzeugtes SQL:", aeltestes.toSQL().sql);
+console.log("Ältestes Album, Parameter:", aeltestes.toSQL().params);
+const aeltesteZeile = (await aeltestes)[0];
 console.log(
   "Ältestes Album:",
-  aeltestes[0].titel,
+  aeltesteZeile.titel,
   "(",
-  aeltestes[0].jahr,
+  aeltesteZeile.jahr,
   ")",
 );
 
